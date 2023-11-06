@@ -12,8 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('mails', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->increments("id");
+            $table->foreignId("id_user_from")->nullable()->constrained('users', 'id');
+            $table->foreignId("id_user_to")->nullable()->constrained('users', 'id');
+            $table->string("subject");
+            $table->text("message");
+            $table->boolean("is_read");
+            $table->timestamp("sent")->nullable();
+            $table->timestamp("created");
         });
     }
 
