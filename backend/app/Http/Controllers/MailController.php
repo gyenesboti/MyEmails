@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Mail;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class MailController extends Controller
 {
@@ -44,6 +46,26 @@ class MailController extends Controller
     public function deleteMail (int $id): int
     {
         return Mail::destroy($id);
+    }
+
+    public function newEmail (int $id, Request $request): \Illuminate\Http\JsonResponse
+    {
+        $fields = $request->validate([
+            "email" => "required|email|exists:users",
+            "subject" => "required|string",
+            "message" => "required|string",
+        ]);
+        $user_to = User::query()->where("email", "=", $fields["email"])->first()->id;
+        $email = Mail::query()->create([
+            "id_user_from" => $id,
+            "id_user_to" => $user_to,
+            "subject" => $fields["subject"],
+            "message" => $fields["message"],
+            "is_read" => false,
+            "sent" => date('Y-m-d H:i:s'),
+            "created" => date('Y-m-d H:i:s'),
+        ]);
+        return response()->json(["email" => $email], Response::HTTP_CREATED);
     }
 
     /**
