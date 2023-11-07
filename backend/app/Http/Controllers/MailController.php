@@ -27,6 +27,20 @@ class MailController extends Controller
             ->get();
     }
 
+    public function getMailForRead (int $id)
+    {
+        Mail::query()
+            ->where("mails.id", "=", $id)
+            ->update(["is_read" => true]);
+
+        return Mail::query()
+            ->select("mails.*", "users.id as userID", "users.name")
+            ->join("users", "mails.id_user_from", "=", "users.id")
+            ->where("mails.id", "=", $id)
+            ->get()
+            ->first();
+    }
+
     /**
      * Display a listing of the resource.
      */
