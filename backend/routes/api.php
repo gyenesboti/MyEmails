@@ -24,6 +24,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get("/allMails/{id}", [MailController::class, "allMails"]);
     Route::get("/email/{id}", [MailController::class, "getMailForRead"]);
     Route::delete("/deleteMail/{id}", [MailController::class, "deleteMail"]);
+    Route::post("/logout", [UserController::class, 'logout']);
 });
 
 
