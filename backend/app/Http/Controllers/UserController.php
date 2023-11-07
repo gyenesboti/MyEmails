@@ -3,10 +3,31 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+
+    public function signup (Request $request): \Illuminate\Http\JsonResponse
+    {
+        $fields = $request->validate([
+            "name" => "required|string",
+            "email" => "required|string|unique:users,email",
+            "password" => "required|string|confirmed",
+        ]);
+
+        $user = User::query()->create([
+            "name" => $fields["name"],
+            "email" => $fields["email"],
+            "password" => Hash::make($fields["password"]),
+            "email_verified_at" => date('Y-m-d H:i:s'),
+        ]);
+
+        return response()->json($user, \Symfony\Component\HttpFoundation\Response::HTTP_CREATED);
+    }
+
     /**
      * Display a listing of the resource.
      */
