@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -26,6 +27,24 @@ class UserController extends Controller
         ]);
 
         return response()->json($user, \Symfony\Component\HttpFoundation\Response::HTTP_CREATED);
+    }
+
+    public function login (Request $request): \Illuminate\Http\JsonResponse
+    {
+        $fields = $request->validate([
+            "email" => "required|string",
+            "password" => "required|string",
+
+        ]);
+
+        if (Auth::attempt($fields)){
+            $user = Auth::user();
+            $token = $user->createToken("API token of ". $user["name"])->plainTextToken;
+            $content = ["user" => $user, "token" => $token];
+            return response()->json($content, 200);
+        } else {
+            return response()->json("Incorrect email or password!", 401);
+        }
     }
 
     /**
