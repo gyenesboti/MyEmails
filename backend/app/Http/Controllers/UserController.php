@@ -47,6 +47,12 @@ class UserController extends Controller
         }
     }
 
+    public function logout (Request $request): \Illuminate\Http\JsonResponse
+    {
+        $request->user()->currentAccessToken()->delete();
+        return response()->json(["You have successfully been logged out!"]);
+    }
+
     /**
      * Display a listing of the resource.
      */
