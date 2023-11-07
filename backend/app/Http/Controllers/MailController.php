@@ -3,10 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Mail;
 use Illuminate\Http\Request;
 
 class MailController extends Controller
 {
+    public function getSentMails (int $id): \Illuminate\Support\Collection
+    {
+        return Mail::query()
+            ->select("mails.*", "users.id as userID", "users.name")
+            ->Join("users" , "mails.id_user_to", "=", "users.id")
+            ->where("mails.id_user_from", "=", $id)
+            ->orderBy("mails.sent", "desc")
+            ->get();
+    }
+
     /**
      * Display a listing of the resource.
      */

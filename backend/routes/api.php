@@ -20,7 +20,7 @@ Route::post("/signup", [UserController::class, 'signup']);
 Route::post("/login", [UserController::class, 'login']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::get("/emails/sent/{id}", [MailController::class, 'getSentEmails']);
+    Route::get("/emails/sent/{id}", [MailController::class, 'getSentMails']);
     Route::get("/allMails/{id}", [MailController::class, "allMails"]);
     Route::get("/email/{id}", [MailController::class, "getMailForRead"]);
     Route::delete("/deleteMail/{id}", [MailController::class, "deleteMail"]);
