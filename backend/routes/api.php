@@ -27,9 +27,3 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post("/newEmail/{id}", [MailController::class, 'newEmail']);
     Route::post("/logout", [UserController::class, 'logout']);
 });
-
-
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
