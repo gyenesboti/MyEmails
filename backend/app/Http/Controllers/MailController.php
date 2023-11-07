@@ -18,6 +18,15 @@ class MailController extends Controller
             ->get();
     }
 
+    public function allMails (int $id): \Illuminate\Database\Eloquent\Collection|array
+    {
+        return Mail::query()
+            ->select("mails.*", "users.id as userID", "users.name")
+            ->join("users", "mails.id_user_from", "=", "users.id")
+            ->where("mails.id_user_to", "=", $id)
+            ->get();
+    }
+
     /**
      * Display a listing of the resource.
      */
