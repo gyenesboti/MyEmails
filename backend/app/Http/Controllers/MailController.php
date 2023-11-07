@@ -41,6 +41,11 @@ class MailController extends Controller
             ->first();
     }
 
+    public function deleteMail (int $id): int
+    {
+        return Mail::destroy($id);
+    }
+
     /**
      * Display a listing of the resource.
      */
